@@ -1,5 +1,5 @@
 {
-  "name": "common",
+  "name": "@huatu/common",
   "version": "1.0.0",
   "description": "huatu-tech/common",
   "main": "index.js",
