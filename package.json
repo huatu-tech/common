@@ -1,10 +1,17 @@
 {
   "name": "@huatu/common",
   "version": "1.0.0",
-  "description": "huatu-tech/common",
+  "description": "huatu-tech/common","keywords": [
+    "utils"
+  ],
   "main": "index.js",
   "repository": "git@github.com:huatu-tech/common.git",
   "author": "“kangyu” <kangyu@huatu.com>",
   "license": "MIT",
-  "private": false
+  "private": false,
+  "types": "index.d.ts",
+  "files": [
+    "dist",
+    "*.d.ts"
+  ]
 }
