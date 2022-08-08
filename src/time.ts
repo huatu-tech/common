@@ -7,7 +7,7 @@ enum days {
   '四' = 4,
   '五' = 5,
   '六' = 6,
-  '日' = 0
+  '日' = 0,
 }
 
 /**
@@ -16,15 +16,16 @@ enum days {
  * @return:    Date
  * e.g.         proDate(time,'{%y+1}-{%M+2}-{%d+1}-{%H+1}-{%m+1}-{%s+1}') //年月日时分秒全部加1
  */
- export const  proDate = (time: Date, proStr:string): Date | undefined => {
-  var dealWith = function(str:string, date: Date) {
-    let t = str.substring(0, 1)
+export const proDate = (time: Date, proStr: string): Date | undefined => {
+  const dealWith = function (str: string, date: Date) {
+    const t = str.substring(0, 1)
     let num = ''
-    if (str.indexOf('+') > -1) {
+    if (str.includes('+'))
       num = str.substring(str.indexOf('+'))
-    } else if (str.indexOf('-') > -1) {
+
+    else if (str.includes('-'))
       num = str.substring(str.indexOf('-'))
-    }
+
     switch (t) {
       case 'y':
         date.setFullYear(date.getFullYear() + parseInt(String(num)))
@@ -51,7 +52,7 @@ enum days {
   let arr = []
   let date
   arr = proStr.split('{%')
-  for (var i = 1; i < arr.length; i++) {
+  for (let i = 1; i < arr.length; i++) {
     arr[i] = arr[i].replace('}-', '')
     arr[i] = arr[i].replace('}', '')
     date = dealWith(arr[i], time)
@@ -59,39 +60,32 @@ enum days {
   return date
 }
 
+export const formatDate = (dateObj: Date, mask: string): string => {
+  if (typeof dateObj === 'number')
+    dateObj = new Date(dateObj)
 
+  if (Object.prototype.toString.call(dateObj) !== '[object Date]' || isNaN(dateObj.getTime()))
+    throw new Error('Invalid Date in fecha.format')
 
-export const formatDate = (dateObj:Date, mask:string):string {
+  mask = mask || 'yyyy-MM-dd'
 
-  if (typeof dateObj === 'number') {
-    dateObj = new Date(dateObj);
-  }
-
-  if (Object.prototype.toString.call(dateObj) !== '[object Date]' || isNaN(dateObj.getTime())) {
-    throw new Error('Invalid Date in fecha.format');
-  }
-
-  mask = mask || 'yyyy-MM-dd';
-
-  var dict:any = {
+  const dict: any = {
     yyyy: dateObj.getFullYear(),
     M: dateObj.getMonth() + 1,
     d: dateObj.getDate(),
     H: dateObj.getHours(),
     m: dateObj.getMinutes(),
     s: dateObj.getSeconds(),
-    MM: ('' + (dateObj.getMonth() + 101)).substring(1),
-    dd: ('' + (dateObj.getDate() + 100)).substring(1),
-    HH: ('' + (dateObj.getHours() + 100)).substring(1),
-    mm: ('' + (dateObj.getMinutes() + 100)).substring(1),
-    ss: ('' + (dateObj.getSeconds() + 100)).substring(1)
+    MM: (`${dateObj.getMonth() + 101}`).substring(1),
+    dd: (`${dateObj.getDate() + 100}`).substring(1),
+    HH: (`${dateObj.getHours() + 100}`).substring(1),
+    mm: (`${dateObj.getMinutes() + 100}`).substring(1),
+    ss: (`${dateObj.getSeconds() + 100}`).substring(1),
   }
-  return mask.replace(/(yyyy|MM?|dd?|HH?|ss?|mm?)/g, function() {
-    return dict[arguments[0]]
+  return mask.replace(/(yyyy|MM?|dd?|HH?|ss?|mm?)/g, (arg: any) => {
+    return dict[arg[0]]
   })
 }
-
-
 
 /**
  * 获取某月份第一天和最后一天的时间
@@ -99,15 +93,13 @@ export const formatDate = (dateObj:Date, mask:string):string {
  * @param {number} date 时间戳
  * @returns {Array<Date>} 第一天和最后一天
  */
- export const getMonthEnds = (date:Date):Array<Date> => {
-  let day = new Date(date)
-  let year = day.getFullYear()
-  let month = day.getMonth()
+export const getMonthEnds = (date: Date): Array<Date> => {
+  const day = new Date(date)
+  const year = day.getFullYear()
+  const month = day.getMonth()
 
   return [new Date(year, month, 1), new Date(year, month + 1, 0)]
 }
-
-
 
 /**
  * 获取周的大写num
@@ -115,9 +107,7 @@ export const formatDate = (dateObj:Date, mask:string):string {
  * @param  {number} day 星期n
  * @returns {string}
  */
- export const getWeekNum = (day:number):string =>  days[day]
-
-
+export const getWeekNum = (day: number): string => days[day]
 
 /**
  * 处理时间范围的结束时间，补全”23：59：59“
@@ -125,17 +115,16 @@ export const formatDate = (dateObj:Date, mask:string):string {
  * @param {number} time 需要处理的时间戳
  * @returns {number} 需要好的时间戳
  */
-export const handleEndTime = (time:Date):Date | number => {
-  let timeType = Object.prototype.toString.call(time)
-  if (timeType == '[object Number]' || timeType == '[object Date]') {
-      let date = new Date(time)
-      return Number(new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59))
-  } else {
-      throw new Error('传入参数不正确')
+export const handleEndTime = (time: Date): Date | number => {
+  const timeType = Object.prototype.toString.call(time)
+  if (timeType === '[object Number]' || timeType === '[object Date]') {
+    const date = new Date(time)
+    return Number(new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59))
+  }
+  else {
+    throw new Error('传入参数不正确')
   }
 }
-
-
 
 /**
  * 处理时间范围的开始时间，时间设置为”00：00：00“
@@ -143,13 +132,14 @@ export const handleEndTime = (time:Date):Date | number => {
  * @param {number} time 需要处理的时间戳
  * @returns {number} 需要好的时间戳
  */
-export const handleStartTime = (time:Date):Date | number => {
-  let timeType = Object.prototype.toString.call(time)
-  if (timeType == '[object Number]' || timeType == '[object Date]') {
-      let date = new Date(time)
-      return Number(new Date(date.getFullYear(), date.getMonth(), date.getDate()))
-  } else {
-      throw new Error('传入参数不正确')
+export const handleStartTime = (time: Date): Date | number => {
+  const timeType = Object.prototype.toString.call(time)
+  if (timeType === '[object Number]' || timeType === '[object Date]') {
+    const date = new Date(time)
+    return Number(new Date(date.getFullYear(), date.getMonth(), date.getDate()))
+  }
+  else {
+    throw new Error('传入参数不正确')
   }
 }
 
@@ -158,13 +148,13 @@ export const handleStartTime = (time:Date):Date | number => {
  * @return  "2017-12"
  *
  **/
- export const timeInit = (time:Date):string => {
-  if (!time) {
-      return ''
-  }
-  let timer = new Date(time)
-  let year = timer.getFullYear()
-  let month = timer.getMonth()
-  let day = timer.getDate()
-  return String(year) + '/' + month + '/' + day
+export const timeInit = (time: Date): string => {
+  if (!time)
+    return ''
+
+  const timer = new Date(time)
+  const year = timer.getFullYear()
+  const month = timer.getMonth()
+  const day = timer.getDate()
+  return `${String(year)}/${month}/${day}`
 }
