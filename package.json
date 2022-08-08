@@ -1,14 +1,15 @@
 {
   "name": "@huatu/common",
   "version": "1.0.1",
-  "description": "huatu-tech/common","keywords": [
+  "private": false,
+  "description": "huatu-tech/common",
+  "keywords": [
     "utils"
   ],
-  "main": "src/index.ts",
-  "repository": "git@github.com:huatu-tech/common.git",
-  "author": "“kangyu” <kangyu@huatu.com>",
   "license": "MIT",
-  "private": false,
+  "author": "“kangyu” <kangyu@huatu.com>",
+  "repository": "git@github.com:huatu-tech/common.git",
+  "main": "index.ts",
   "types": "index.d.ts",
   "files": [
     "dist",
