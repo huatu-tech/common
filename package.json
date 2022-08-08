@@ -15,6 +15,9 @@
     "dist",
     "*.d.ts"
   ],
+  "publishConfig": {
+    "registry": "http://nexus.huatuop.com/repository/npm-hosted/"
+  },
   "sideEffects": false,
   "scripts": {
     "build": "rollup -c",
